@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Hệ Thống Cảnh Báo Ngập Lụt</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>HỆ THỐNG GIÁM SÁT MỰC NƯỚC</h1>
+      <p class="sub-title">Dự án: Hệ thống cảnh báo ngập lụt khu vực trũng</p>
+
+      <div id="status-box" class="safe">ĐANG CẬP NHẬT...</div>
+      <p>Giá trị mực nước hiện tại: <span id="water-level">0</span></p>
+
+      <div class="charts">
+        <iframe
+          width="450"
+          height="260"
+          src="https://thingspeak.com/channels/3221980/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15"
+        ></iframe>
+
+        <iframe
+          width="450"
+          height="260"
+          src="https://thingspeak.mathworks.com/channels/3221980/widgets/1201629"
+        ></iframe>
+      </div>
+
+      <div class="info">
+        Dữ liệu được cập nhật tự động mỗi 20 giây từ trạm đo ESP8266
+      </div>
+    </div>
+
+    <script>
+      const channelID = "3221980"; // THAY CHANNEL ID CỦA BẠN
+      const readAPIKey = "THNJ3WW4G5SWUB5O"; // THAY READ API KEY CỦA BẠN
+      const threshold = 1000; // Ngưỡng cảnh báo (Bạn có thể điều chỉnh số này)
+
+      function updateStatus() {
+        fetch(
+          `https://api.thingspeak.com/channels/${channelID}/feeds/last.json?api_key=${readAPIKey}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            const val = parseInt(data.field1);
+            document.getElementById("water-level").innerText = val;
+            const statusBox = document.getElementById("status-box");
+
+            if (val < threshold) {
+              statusBox.innerText = "CẢNH BÁO: NGUY CƠ NGẬP LỤT!";
+              statusBox.className = "warning";
+            } else {
+              statusBox.innerText = "TRẠNG THÁI: AN TOÀN";
+              statusBox.className = "safe";
+            }
+          })
+          .catch((err) => console.error("Lỗi lấy dữ liệu:", err));
+      }
+
+      // Cập nhật trạng thái mỗi 15 giây
+      setInterval(updateStatus, 15000);
+      updateStatus(); // Chạy ngay lần đầu
+    </script>
+  </body>
+</html>
