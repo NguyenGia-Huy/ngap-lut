@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
@@ -36,15 +36,15 @@
     <script>
       const channelID = "3221980"; // THAY CHANNEL ID CỦA BẠN
       const readAPIKey = "THNJ3WW4G5SWUB5O"; // THAY READ API KEY CỦA BẠN
-      const threshold = 1000; // Ngưỡng cảnh báo (Bạn có thể điều chỉnh số này)
+      const threshold = 100; // Ngưỡng cảnh báo (Bạn có thể điều chỉnh số này)
 
       function updateStatus() {
         fetch(
-          `https://api.thingspeak.com/channels/${channelID}/feeds/last.json?api_key=${readAPIKey}`
+          `https://api.thingspeak.com/channels/${channelID}/feeds/last.json?api_key=${readAPIKey}`,
         )
           .then((response) => response.json())
           .then((data) => {
-            const val = parseInt(data.field1);
+            const val = parseInt(data.field2);
             document.getElementById("water-level").innerText = val;
             const statusBox = document.getElementById("status-box");
 
