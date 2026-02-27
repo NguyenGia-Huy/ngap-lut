@@ -36,7 +36,7 @@
     <script>
       const channelID = "3221980"; // THAY CHANNEL ID CỦA BẠN
       const readAPIKey = "THNJ3WW4G5SWUB5O"; // THAY READ API KEY CỦA BẠN
-      const threshold = 100; // Ngưỡng cảnh báo (Bạn có thể điều chỉnh số này)
+      const threshold = 300; // Ngưỡng cảnh báo (Bạn có thể điều chỉnh số này)
 
       function updateStatus() {
         fetch(
@@ -48,7 +48,7 @@
             document.getElementById("water-level").innerText = val;
             const statusBox = document.getElementById("status-box");
 
-            if (val < threshold) {
+            if (val >= threshold) {
               statusBox.innerText = "CẢNH BÁO: NGUY CƠ NGẬP LỤT!";
               statusBox.className = "warning";
             } else {
@@ -65,3 +65,4 @@
     </script>
   </body>
 </html>
+
